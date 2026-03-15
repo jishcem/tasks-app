@@ -1,0 +1,60 @@
+name: Deploy Backend to Azure App Service
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'apps/backend/**'
+      - 'packages/shared/**'
+      - 'package.json'
+      - '.github/workflows/deploy-backend.yml'
+
+jobs:
+  build_and_deploy:
+    runs-on: ubuntu-latest
+    name: Build and Deploy
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+
+      - name: Install all dependencies (including devDependencies for build)
+        run: npm ci
+
+      - name: Build shared package and backend
+        run: npm run build:shared && npm run build:backend
+
+      - name: Prune to production dependencies only
+        run: npm ci --omit=dev --ignore-scripts
+
+      - name: Package deployment artifact
+        # Creates a ZIP with only what App Service needs:
+        # - Compiled JS from backend and shared
+        # - Production node_modules (workspace-aware)
+        # - Root and workspace package.json files
+        run: |
+          zip -r deploy.zip \
+            package.json \
+            package-lock.json \
+            node_modules/ \
+            apps/backend/dist/ \
+            apps/backend/package.json \
+            packages/shared/dist/ \
+            packages/shared/package.json \
+            -x "node_modules/.cache/*" \
+            -x "node_modules/.bin/*"
+
+      - name: Deploy to Azure App Service
+        uses: azure/webapps-deploy@v3
+        with:
+          app-name: ${{ secrets.AZURE_APP_SERVICE_NAME }}
+          publish-profile: ${{ secrets.AZURE_APP_SERVICE_PUBLISH_PROFILE }}
+          package: deploy.zip
+          startup-command: 'node apps/backend/dist/server.js'
