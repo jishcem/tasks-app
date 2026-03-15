@@ -31,6 +31,18 @@ jobs:
       - name: Build shared package and backend
         run: npm run build:shared && npm run build:backend
 
+      - name: Azure Login
+        uses: azure/login@v2
+        with:
+          creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+      - name: Set App Service startup command
+        run: |
+          az webapp config set \
+            --name ${{ secrets.AZURE_APP_SERVICE_NAME }} \
+            --resource-group ${{ secrets.AZURE_RESOURCE_GROUP }} \
+            --startup-file 'node apps/backend/dist/server.js'
+
       - name: Prune to production dependencies only
         run: npm ci --omit=dev --ignore-scripts
 
@@ -57,4 +69,3 @@ jobs:
           app-name: ${{ secrets.AZURE_APP_SERVICE_NAME }}
           publish-profile: ${{ secrets.AZURE_APP_SERVICE_PUBLISH_PROFILE }}
           package: deploy.zip
-          startup-command: 'node apps/backend/dist/server.js'
