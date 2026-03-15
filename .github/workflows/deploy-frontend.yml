@@ -35,7 +35,8 @@ jobs:
         run: ./node_modules/.bin/tsc -p packages/shared/tsconfig.json
 
       - name: Build frontend
-        run: cd apps/frontend && ../../node_modules/.bin/ng build --configuration production
+        working-directory: apps/frontend
+        run: $GITHUB_WORKSPACE/node_modules/.bin/ng build --configuration production
         env:
           NODE_ENV: production
 
