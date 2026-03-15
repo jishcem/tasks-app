@@ -48,9 +48,9 @@ jobs:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
           action: 'upload'
           ###### Repository/Build Configurations ######
-          app_location: 'apps/frontend'          # Root of the Angular project
-          output_location: 'dist/frontend/browser' # Angular 17+ outputs to browser/ subfolder
-          skip_app_build: true                   # We built above with monorepo context
+          app_location: '/'                                        # Repo root - no build triggered here
+          output_location: 'apps/frontend/dist/frontend/browser'  # Pre-built Angular output
+          skip_app_build: true                                     # Do not rebuild - we built above
           ###### End of Repository/Build Configurations ######
 
   close_pull_request:
