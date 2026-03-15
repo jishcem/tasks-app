@@ -28,8 +28,13 @@ jobs:
       - name: Install all dependencies (including devDependencies for build)
         run: npm ci
 
-      - name: Build shared package and backend
-        run: npm run build:shared && npm run build:backend
+      - name: Build shared package
+        working-directory: packages/shared
+        run: npm run build
+
+      - name: Build backend
+        working-directory: apps/backend
+        run: npm run build
 
       - name: Azure Login
         uses: azure/login@v2

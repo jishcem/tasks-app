@@ -32,7 +32,8 @@ jobs:
         run: npm ci
 
       - name: Build shared package
-        run: npm run build:shared
+        working-directory: packages/shared
+        run: npm run build
 
       - name: Build frontend
         working-directory: apps/frontend
