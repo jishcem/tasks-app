@@ -35,11 +35,9 @@ jobs:
         run: npm run build:shared
 
       - name: Build frontend
-        run: npm run build:frontend
+        working-directory: apps/frontend
+        run: npm run build
         env:
-          # Injected at build time so Angular knows the API base URL in production
-          # The SWA linked backend automatically proxies /api/* — no value needed here
-          # unless you use environment.ts for explicit URLs.
           NODE_ENV: production
 
       - name: Deploy to Azure Static Web Apps
