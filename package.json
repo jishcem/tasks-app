@@ -1,0 +1,18 @@
+{
+    "$schema": "https://json.schemastore.org/package.json",
+    "name": "tasks-app",
+    "workspaces": [
+        "apps/*",
+        "packages/*"
+    ],
+    "scripts": {
+        "dev": "npm run build:shared && concurrently --names shared,backend,frontend --prefix-colors blue,green,magenta \"npm run dev -w packages/shared\" \"npm run dev -w apps/backend\" \"npm run start -w apps/frontend\"",
+        "build": "npm run build:shared && npm run build:backend && npm run build:frontend",
+        "build:shared": "npm run build -w packages/shared",
+        "build:backend": "npm run build -w apps/backend",
+        "build:frontend": "npm run build -w apps/frontend"
+    },
+    "devDependencies": {
+        "concurrently": "^9.2.1"
+    }
+}
