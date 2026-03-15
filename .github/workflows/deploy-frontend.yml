@@ -51,6 +51,7 @@ jobs:
           app_location: '/'                                        # Repo root - no build triggered here
           output_location: 'apps/frontend/dist/frontend/browser'  # Pre-built Angular output
           skip_app_build: true                                     # Do not rebuild - we built above
+          app_build_command: 'echo "Build already done"'          # Override Oryx to prevent it running root npm build script
           ###### End of Repository/Build Configurations ######
 
   close_pull_request:
