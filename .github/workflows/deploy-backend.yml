@@ -29,12 +29,10 @@ jobs:
         run: npm ci
 
       - name: Build shared package
-        working-directory: packages/shared
-        run: npx tsc
+        run: ./node_modules/.bin/tsc -p packages/shared/tsconfig.json
 
       - name: Build backend
-        working-directory: apps/backend
-        run: npx tsc
+        run: ./node_modules/.bin/tsc -p apps/backend/tsconfig.json
 
       - name: Azure Login
         uses: azure/login@v2

@@ -32,12 +32,10 @@ jobs:
         run: npm ci
 
       - name: Build shared package
-        working-directory: packages/shared
-        run: npx tsc
+        run: ./node_modules/.bin/tsc -p packages/shared/tsconfig.json
 
       - name: Build frontend
-        working-directory: apps/frontend
-        run: npx ng build --configuration production
+        run: cd apps/frontend && ../../node_modules/.bin/ng build --configuration production
         env:
           NODE_ENV: production
 
