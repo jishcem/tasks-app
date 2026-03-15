@@ -33,11 +33,11 @@ jobs:
 
       - name: Build shared package
         working-directory: packages/shared
-        run: npm run build
+        run: npx tsc
 
       - name: Build frontend
         working-directory: apps/frontend
-        run: npm run build
+        run: npx ng build --configuration production
         env:
           NODE_ENV: production
 

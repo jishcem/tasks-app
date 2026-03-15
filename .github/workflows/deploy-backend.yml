@@ -30,11 +30,11 @@ jobs:
 
       - name: Build shared package
         working-directory: packages/shared
-        run: npm run build
+        run: npx tsc
 
       - name: Build backend
         working-directory: apps/backend
-        run: npm run build
+        run: npx tsc
 
       - name: Azure Login
         uses: azure/login@v2
